@@ -23,19 +23,12 @@
         INTEGER(KIND=8)            :: bits
         x%val = HUGE(a%val)
         IF (RPE_ACTIVE) THEN
-            IF (RPE_IEEE_HALF) THEN
-                ! For half precision emulation we need to specify the value
-                ! explicitly, HUGE cannot do this in the absence of a native
-                ! 16-bit real type:
-                x%val = 65504
-            ELSE
-                ! Truncate to the required size without rounding, applying
-                ! rounding will always round to infinity and is therefore no
-                ! good for this purpose:
-                lmtb = 52 - RPE_DEFAULT_SBITS - 1
-                bits = TRANSFER(x%val, bits)
-                CALL MVBITS (zero_bits, 0, lmtb + 1, bits, 0)
-                x%val = TRANSFER(bits, x%val)
-            END IF
+            ! Truncate to the required size without rounding, applying
+            ! rounding will always round to infinity and is therefore no
+            ! good for this purpose:
+            lmtb = 52 - RPE_DEFAULT_SBITS - 1
+            bits = TRANSFER(x%val, bits)
+            CALL MVBITS (zero_bits, 0, lmtb + 1, bits, 0)
+            x%val = TRANSFER(bits, x%val)
         END IF
     END FUNCTION huge_rpe
