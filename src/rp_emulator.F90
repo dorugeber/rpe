@@ -42,7 +42,7 @@ MODULE rp_emulator
     INTEGER, PARAMETER, PUBLIC :: RPE_ALTERNATE_KIND = RPE_SINGLE_KIND
 
     !: The default number of bits to use in the reduced-precision significand.
-    INTEGER, PARAMETER, PUBLIC :: RPE_DEFAULT_SBITS = 15
+    INTEGER, PARAMETER, PRIVATE :: RPE_DEFAULT_SBITS = 15
 
     !: An internal value used to represent the case where a reduced-precision
     !: number has no specified precision yet.
@@ -133,11 +133,10 @@ CONTAINS
 
         ! Cast the input to a double-precision value.
         y = REAL(x%val, RPE_DOUBLE_KIND)
-        n = RPE_DEFAULT_SBITS
-        x%val = truncate_significand(y, n)
+        x%val = truncate_significand(y)
     END SUBROUTINE apply_truncation
 
-    ELEMENTAL FUNCTION truncate_significand (x, n) RESULT (t)
+    ELEMENTAL FUNCTION truncate_significand (x) RESULT (t)
     ! Truncate the significand of a double precision floating point
     ! number to a specified number of bits.
     !
@@ -146,9 +145,6 @@ CONTAINS
     ! * x: real(kind=RPE_DOUBLE_KIND) [input]
     !     The double precision number to truncate.
     !
-    ! * n: integer [input]
-    !     The number of bits to truncate the significand to.
-    !
     ! Returns:
     !
     ! * t: real(kind=RPE_DOUBLE_KIND)
@@ -156,7 +152,6 @@ CONTAINS
     !     bits in the significand.
     !
         REAL(KIND=RPE_DOUBLE_KIND), INTENT(IN) :: x
-        INTEGER,                    INTENT(IN) :: n
         REAL(KIND=RPE_DOUBLE_KIND) :: t
         INTEGER                    :: lmtb
         INTEGER(KIND=8), PARAMETER :: two = 2
@@ -165,36 +160,33 @@ CONTAINS
         ! The left-most truncated bit is the last bit that will be truncated
         ! (counting from 0 at the right-most bit). Double precision values
         ! have 52 bits in their significand.
-        lmtb = 52 - n - 1
-        IF (lmtb >= 0) THEN
-            ! Copy the double-precision bit representation of the input
-            ! into an integer so it can be manipulated:
-            bits = TRANSFER(x, bits)
-            ! Round the number up first if required according to IEEE 754
-            ! specifications.
-            IF (BTEST(bits, lmtb)) THEN
-                IF (IAND(bits, two ** (lmtb + 1) - 1) == two ** lmtb) THEN
-                    ! We are truncating a number half-way between two
-                    ! representations so we must round to the nearest even
-                    ! representation.
-                    IF (BTEST(bits, lmtb + 1)) THEN
-                        bits = bits + two ** (lmtb + 1)
-                    END IF
-                ELSE
-                    ! The left-most truncated bit is set and we are not
-                    ! half-way between two representations so we need to
-                    ! round to the nearest representation.
+        lmtb = 52 - RPE_DEFAULT_SBITS - 1
+
+        ! Copy the double-precision bit representation of the input
+        ! into an integer so it can be manipulated:
+        bits = TRANSFER(x, bits)
+        ! Round the number up first if required according to IEEE 754
+        ! specifications.
+        IF (BTEST(bits, lmtb)) THEN
+            IF (IAND(bits, two ** (lmtb + 1) - 1) == two ** lmtb) THEN
+                ! We are truncating a number half-way between two
+                ! representations so we must round to the nearest even
+                ! representation.
+                IF (BTEST(bits, lmtb + 1)) THEN
                     bits = bits + two ** (lmtb + 1)
                 END IF
+            ELSE
+                ! The left-most truncated bit is set and we are not
+                ! half-way between two representations so we need to
+                ! round to the nearest representation.
+                bits = bits + two ** (lmtb + 1)
             END IF
-            ! Move rounding_bit + 1 bits from the number zero (all bits
-            ! set to zero) into the target to truncate at the given
-            ! number of bits.
-            CALL MVBITS (zero_bits, 0, lmtb + 1, bits, 0)
-            t = TRANSFER(bits, t)
-        ELSE
-            t = x
         END IF
+        ! Move rounding_bit + 1 bits from the number zero (all bits
+        ! set to zero) into the target to truncate at the given
+        ! number of bits.
+        CALL MVBITS (zero_bits, 0, lmtb + 1, bits, 0)
+        t = TRANSFER(bits, t)
     END FUNCTION truncate_significand
 
     FUNCTION rpe_literal_real (x, n) RESULT (z)
