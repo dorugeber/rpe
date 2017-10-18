@@ -22,13 +22,12 @@
         INTEGER(KIND=8), PARAMETER :: zero_bits = 0
         INTEGER(KIND=8)            :: bits
         x%val = HUGE(a%val)
-        IF (RPE_ACTIVE) THEN
-            ! Truncate to the required size without rounding, applying
-            ! rounding will always round to infinity and is therefore no
-            ! good for this purpose:
-            lmtb = 52 - RPE_DEFAULT_SBITS - 1
-            bits = TRANSFER(x%val, bits)
-            CALL MVBITS (zero_bits, 0, lmtb + 1, bits, 0)
-            x%val = TRANSFER(bits, x%val)
-        END IF
+
+        ! Truncate to the required size without rounding, applying
+        ! rounding will always round to infinity and is therefore no
+        ! good for this purpose:
+        lmtb = 52 - RPE_DEFAULT_SBITS - 1
+        bits = TRANSFER(x%val, bits)
+        CALL MVBITS (zero_bits, 0, lmtb + 1, bits, 0)
+        x%val = TRANSFER(bits, x%val)
     END FUNCTION huge_rpe

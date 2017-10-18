@@ -41,9 +41,6 @@ MODULE rp_emulator
     !: single-precision.
     INTEGER, PARAMETER, PUBLIC :: RPE_ALTERNATE_KIND = RPE_SINGLE_KIND
 
-    !: Logical flag for turning the emulator on/off.
-    LOGICAL, PUBLIC :: RPE_ACTIVE = .TRUE.
-
     !: The default number of bits to use in the reduced-precision significand.
     INTEGER, PUBLIC :: RPE_DEFAULT_SBITS = 52
 
@@ -125,10 +122,6 @@ CONTAINS
     ! `sbits` attribute is not set it will truncate to the number of
     ! bits specified by the current value of `RPE_DEFAULT_SBITS`.
     !
-    ! If the module variable RPE_ACTIVE is false this subroutine returns
-    ! the unaltered input value, it only performs the bit truncation if
-    ! RPE_ACTIVE is true.
-    !
     ! Argument:
     !
     ! * x: type(rpe_type) [input/output]
@@ -137,12 +130,11 @@ CONTAINS
         TYPE(rpe_var), INTENT(INOUT) :: x
         REAL(KIND=RPE_DOUBLE_KIND)   :: y
         INTEGER :: n
-        IF (RPE_ACTIVE) THEN
-            ! Cast the input to a double-precision value.
-            y = REAL(x%val, RPE_DOUBLE_KIND)
-            n = RPE_DEFAULT_SBITS
-            x%val = truncate_significand(y, n)
-        END IF
+
+        ! Cast the input to a double-precision value.
+        y = REAL(x%val, RPE_DOUBLE_KIND)
+        n = RPE_DEFAULT_SBITS
+        x%val = truncate_significand(y, n)
     END SUBROUTINE apply_truncation
 
     ELEMENTAL FUNCTION truncate_significand (x, n) RESULT (t)
