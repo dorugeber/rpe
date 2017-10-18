@@ -42,7 +42,7 @@ MODULE rp_emulator
     INTEGER, PARAMETER, PUBLIC :: RPE_ALTERNATE_KIND = RPE_SINGLE_KIND
 
     !: The default number of bits to use in the reduced-precision significand.
-    INTEGER, PUBLIC :: RPE_DEFAULT_SBITS = 52
+    INTEGER, PARAMETER, PUBLIC :: RPE_DEFAULT_SBITS = 15
 
     !: An internal value used to represent the case where a reduced-precision
     !: number has no specified precision yet.
