@@ -128,31 +128,6 @@ CONTAINS
     !     The `rpe_type` instance to truncate.
     !
         TYPE(rpe_var), INTENT(INOUT) :: x
-        REAL(KIND=RPE_DOUBLE_KIND)   :: y
-        INTEGER :: n
-
-        ! Cast the input to a double-precision value.
-        y = REAL(x%val, RPE_DOUBLE_KIND)
-        x%val = truncate_significand(y)
-    END SUBROUTINE apply_truncation
-
-    ELEMENTAL FUNCTION truncate_significand (x) RESULT (t)
-    ! Truncate the significand of a double precision floating point
-    ! number to a specified number of bits.
-    !
-    ! Arguments:
-    !
-    ! * x: real(kind=RPE_DOUBLE_KIND) [input]
-    !     The double precision number to truncate.
-    !
-    ! Returns:
-    !
-    ! * t: real(kind=RPE_DOUBLE_KIND)
-    !     A double precision number representing `x` truncated to `n`
-    !     bits in the significand.
-    !
-        REAL(KIND=RPE_DOUBLE_KIND), INTENT(IN) :: x
-        REAL(KIND=RPE_DOUBLE_KIND) :: t
         INTEGER                    :: lmtb
         INTEGER(KIND=8), PARAMETER :: two = 2
         INTEGER(KIND=8), PARAMETER :: zero_bits = 0
@@ -164,7 +139,7 @@ CONTAINS
 
         ! Copy the double-precision bit representation of the input
         ! into an integer so it can be manipulated:
-        bits = TRANSFER(x, bits)
+        bits = TRANSFER(x%val, bits)
         ! Round the number up first if required according to IEEE 754
         ! specifications.
         IF (BTEST(bits, lmtb)) THEN
@@ -186,8 +161,8 @@ CONTAINS
         ! set to zero) into the target to truncate at the given
         ! number of bits.
         CALL MVBITS (zero_bits, 0, lmtb + 1, bits, 0)
-        t = TRANSFER(bits, t)
-    END FUNCTION truncate_significand
+        x%val = TRANSFER(bits, x%val)
+    END SUBROUTINE apply_truncation
 
     FUNCTION rpe_literal_real (x, n) RESULT (z)
     ! Create an `rpe_var` instance from a real literal.
