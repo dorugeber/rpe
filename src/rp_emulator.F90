@@ -66,7 +66,6 @@ MODULE rp_emulator
     ! This type is a container for a floating-point number which is
     ! operated on in reduced precision.
     !
-        INTEGER :: sbits = RPE_SBITS_UNSPECIFIED
         REAL(KIND=RPE_REAL_KIND) :: val
     END TYPE
 
@@ -81,7 +80,7 @@ MODULE rp_emulator
     END INTERFACE
 
     ! Make the core emulator routines importable.
-    PUBLIC :: apply_truncation, significand_bits
+    PUBLIC :: apply_truncation
 
     PUBLIC ASSIGNMENT(=)
     INTERFACE ASSIGNMENT(=)
@@ -145,15 +144,7 @@ CONTAINS
         IF (RPE_ACTIVE) THEN
             ! Cast the input to a double-precision value.
             y = REAL(x%val, RPE_DOUBLE_KIND)
-            IF (x%sbits == RPE_SBITS_UNSPECIFIED) THEN
-                ! If the input does not have a specified precision then assume
-                ! the default precision. This is does not fix the precision of
-                ! the input variable, it will still use whatever is specified
-                ! as the default, even if that changes later.
-                n = RPE_DEFAULT_SBITS
-            ELSE
-                n = x%sbits
-            END IF
+            n = RPE_DEFAULT_SBITS
             x%val = truncate_significand(y, n)
         END IF
     END SUBROUTINE apply_truncation
@@ -268,42 +259,6 @@ CONTAINS
         END IF
     END FUNCTION adjust_ieee_half
 
-    ELEMENTAL FUNCTION significand_bits (x) RESULT (z)
-    ! Retrieve the number of bits in a floating point significand.
-    !
-    ! This returns actual values for inputs of type `rpe_type` or `real`
-    ! and 0 for anything else. This function is usually used to find the
-    ! highest precision level involved in a floating-point calculation.
-    !
-    ! Arguments:
-    !
-    ! * x: class(*) [input]
-    !     A scalar input of any type.
-    !
-    ! Returns:
-    !
-    ! * z: integer [output]
-    !     The number of bits in the significand of the input floating-point
-    !     value, or 0 if the input was not a floating-point value.
-    !
-        CLASS(*), INTENT(IN) :: x
-        INTEGER :: z
-        SELECT TYPE (x)
-        TYPE IS (REAL(KIND=RPE_DOUBLE_KIND))
-            z = 52
-        TYPE IS (rpe_var)
-            IF (x%sbits == RPE_SBITS_UNSPECIFIED) THEN
-                z = RPE_DEFAULT_SBITS
-            ELSE
-                z = x%sbits
-            END IF
-        TYPE IS (REAL(KIND=RPE_SINGLE_KIND))
-            z = 23
-        CLASS DEFAULT
-            z = 0
-        END SELECT
-    END FUNCTION significand_bits
-
     FUNCTION rpe_literal_real (x, n) RESULT (z)
     ! Create an `rpe_var` instance from a real literal.
     !
@@ -326,9 +281,6 @@ CONTAINS
         REAL(KIND=RPE_REAL_KIND), INTENT(IN) :: x
         INTEGER, OPTIONAL,        INTENT(IN) :: n
         TYPE(rpe_var) :: z
-        IF (PRESENT(n)) THEN
-            z%sbits = n
-        END IF
         z = x
     END FUNCTION rpe_literal_real
 
@@ -354,9 +306,6 @@ CONTAINS
         REAL(KIND=RPE_ALTERNATE_KIND),           INTENT(IN) :: x
         INTEGER,                       OPTIONAL, INTENT(IN) :: n
         TYPE(rpe_var) :: z
-        IF (PRESENT(n)) THEN
-            z%sbits = n
-        END IF
         z = x
     END FUNCTION rpe_literal_alternate
 
@@ -382,9 +331,6 @@ CONTAINS
         INTEGER,           INTENT(IN) :: x
         INTEGER, OPTIONAL, INTENT(IN) :: n
         TYPE(rpe_var) :: z
-        IF (PRESENT(n)) THEN
-            z%sbits = n
-        END IF
         z = x
     END FUNCTION rpe_literal_integer
 
@@ -410,9 +356,6 @@ CONTAINS
         INTEGER(KIND=8),           INTENT(IN) :: x
         INTEGER,         OPTIONAL, INTENT(IN) :: n
         TYPE(rpe_var) :: z
-        IF (PRESENT(n)) THEN
-            z%sbits = n
-        END IF
         z = x
     END FUNCTION rpe_literal_long
 

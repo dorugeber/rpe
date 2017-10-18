@@ -21,10 +21,9 @@
         INTEGER                    :: lmtb
         INTEGER(KIND=8), PARAMETER :: zero_bits = 0
         INTEGER(KIND=8)            :: bits
-        x%sbits = significand_bits(a)
         x%val = HUGE(a%val)
         IF (RPE_ACTIVE) THEN
-            IF ((x%sbits == 10) .AND. (RPE_IEEE_HALF)) THEN
+            IF (RPE_IEEE_HALF) THEN
                 ! For half precision emulation we need to specify the value
                 ! explicitly, HUGE cannot do this in the absence of a native
                 ! 16-bit real type:
@@ -33,7 +32,7 @@
                 ! Truncate to the required size without rounding, applying
                 ! rounding will always round to infinity and is therefore no
                 ! good for this purpose:
-                lmtb = 52 - x%sbits - 1
+                lmtb = 52 - RPE_DEFAULT_SBITS - 1
                 bits = TRANSFER(x%val, bits)
                 CALL MVBITS (zero_bits, 0, lmtb + 1, bits, 0)
                 x%val = TRANSFER(bits, x%val)

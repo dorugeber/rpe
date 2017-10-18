@@ -5,7 +5,6 @@
     ELEMENTAL FUNCTION add_rpe (x) RESULT (z)
         TYPE(rpe_var), INTENT(IN) :: x
         TYPE(rpe_var) :: z
-        z%sbits = significand_bits(x)
         z = +(x%val)
     END FUNCTION add_rpe
 
@@ -13,7 +12,6 @@
         TYPE(rpe_var), INTENT(IN) :: x
         TYPE(rpe_var), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x%val + y%val
     END FUNCTION add_rpe_rpe
 
@@ -21,7 +19,6 @@
         TYPE(rpe_var), INTENT(IN) :: x
         INTEGER, INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x%val + y
     END FUNCTION add_rpe_integer
 
@@ -29,7 +26,6 @@
         TYPE(rpe_var), INTENT(IN) :: x
         INTEGER(KIND=8), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x%val + y
     END FUNCTION add_rpe_long
 
@@ -37,7 +33,6 @@
         TYPE(rpe_var), INTENT(IN) :: x
         REAL(KIND=RPE_REAL_KIND), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x%val + y
     END FUNCTION add_rpe_real
 
@@ -45,7 +40,6 @@
         TYPE(rpe_var), INTENT(IN) :: x
         REAL(KIND=RPE_ALTERNATE_KIND), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x%val + y
     END FUNCTION add_rpe_realalt
 
@@ -53,7 +47,6 @@
         INTEGER, INTENT(IN) :: x
         TYPE(rpe_var), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x + y%val
     END FUNCTION add_integer_rpe
 
@@ -61,7 +54,6 @@
         INTEGER(KIND=8), INTENT(IN) :: x
         TYPE(rpe_var), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x + y%val
     END FUNCTION add_long_rpe
 
@@ -69,7 +61,6 @@
         REAL(KIND=RPE_REAL_KIND), INTENT(IN) :: x
         TYPE(rpe_var), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x + y%val
     END FUNCTION add_real_rpe
 
@@ -77,7 +68,6 @@
         REAL(KIND=RPE_ALTERNATE_KIND), INTENT(IN) :: x
         TYPE(rpe_var), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x + y%val
     END FUNCTION add_realalt_rpe
 
@@ -88,7 +78,6 @@
     ELEMENTAL FUNCTION sub_rpe (x) RESULT (z)
         TYPE(rpe_var), INTENT(IN) :: x
         TYPE(rpe_var) :: z
-        z%sbits = significand_bits(x)
         z = -(x%val)
     END FUNCTION sub_rpe
 
@@ -96,7 +85,6 @@
         TYPE(rpe_var), INTENT(IN) :: x
         TYPE(rpe_var), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x%val - y%val
     END FUNCTION sub_rpe_rpe
 
@@ -104,7 +92,6 @@
         TYPE(rpe_var), INTENT(IN) :: x
         INTEGER, INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x%val - y
     END FUNCTION sub_rpe_integer
 
@@ -112,7 +99,6 @@
         TYPE(rpe_var), INTENT(IN) :: x
         INTEGER(KIND=8), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x%val - y
     END FUNCTION sub_rpe_long
 
@@ -120,7 +106,6 @@
         TYPE(rpe_var), INTENT(IN) :: x
         REAL(KIND=RPE_REAL_KIND), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x%val - y
     END FUNCTION sub_rpe_real
 
@@ -128,7 +113,6 @@
         TYPE(rpe_var), INTENT(IN) :: x
         REAL(KIND=RPE_ALTERNATE_KIND), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x%val - y
     END FUNCTION sub_rpe_realalt
 
@@ -136,7 +120,6 @@
         INTEGER, INTENT(IN) :: x
         TYPE(rpe_var), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x - y%val
     END FUNCTION sub_integer_rpe
 
@@ -144,7 +127,6 @@
         INTEGER(KIND=8), INTENT(IN) :: x
         TYPE(rpe_var), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x - y%val
     END FUNCTION sub_long_rpe
 
@@ -152,7 +134,6 @@
         REAL(KIND=RPE_REAL_KIND), INTENT(IN) :: x
         TYPE(rpe_var), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x - y%val
     END FUNCTION sub_real_rpe
 
@@ -160,7 +141,6 @@
         REAL(KIND=RPE_ALTERNATE_KIND), INTENT(IN) :: x
         TYPE(rpe_var), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x - y%val
     END FUNCTION sub_realalt_rpe
 
@@ -172,7 +152,6 @@
         TYPE(rpe_var), INTENT(IN) :: x
         TYPE(rpe_var), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x%val * y%val
     END FUNCTION mul_rpe_rpe
 
@@ -180,7 +159,6 @@
         TYPE(rpe_var), INTENT(IN) :: x
         INTEGER, INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x%val * y
     END FUNCTION mul_rpe_integer
 
@@ -188,7 +166,6 @@
         TYPE(rpe_var), INTENT(IN) :: x
         INTEGER(KIND=8), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x%val * y
     END FUNCTION mul_rpe_long
 
@@ -196,7 +173,6 @@
         TYPE(rpe_var), INTENT(IN) :: x
         REAL(KIND=RPE_REAL_KIND), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x%val * y
     END FUNCTION mul_rpe_real
 
@@ -204,7 +180,6 @@
         TYPE(rpe_var), INTENT(IN) :: x
         REAL(KIND=RPE_ALTERNATE_KIND), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x%val * y
     END FUNCTION mul_rpe_realalt
 
@@ -212,7 +187,6 @@
         INTEGER, INTENT(IN) :: x
         TYPE(rpe_var), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x * y%val
     END FUNCTION mul_integer_rpe
 
@@ -220,7 +194,6 @@
         INTEGER(KIND=8), INTENT(IN) :: x
         TYPE(rpe_var), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x * y%val
     END FUNCTION mul_long_rpe
 
@@ -228,7 +201,6 @@
         REAL(KIND=RPE_REAL_KIND), INTENT(IN) :: x
         TYPE(rpe_var), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x * y%val
     END FUNCTION mul_real_rpe
 
@@ -236,7 +208,6 @@
         REAL(KIND=RPE_ALTERNATE_KIND), INTENT(IN) :: x
         TYPE(rpe_var), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x * y%val
     END FUNCTION mul_realalt_rpe
 
@@ -248,7 +219,6 @@
         TYPE(rpe_var), INTENT(IN) :: x
         TYPE(rpe_var), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x%val / y%val
     END FUNCTION div_rpe_rpe
 
@@ -256,7 +226,6 @@
         TYPE(rpe_var), INTENT(IN) :: x
         INTEGER, INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x%val / y
     END FUNCTION div_rpe_integer
 
@@ -264,7 +233,6 @@
         TYPE(rpe_var), INTENT(IN) :: x
         INTEGER(KIND=8), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x%val / y
     END FUNCTION div_rpe_long
 
@@ -272,7 +240,6 @@
         TYPE(rpe_var), INTENT(IN) :: x
         REAL(KIND=RPE_REAL_KIND), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x%val / y
     END FUNCTION div_rpe_real
 
@@ -280,7 +247,6 @@
         TYPE(rpe_var), INTENT(IN) :: x
         REAL(KIND=RPE_ALTERNATE_KIND), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x%val / y
     END FUNCTION div_rpe_realalt
 
@@ -288,7 +254,6 @@
         INTEGER, INTENT(IN) :: x
         TYPE(rpe_var), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x / y%val
     END FUNCTION div_integer_rpe
 
@@ -296,7 +261,6 @@
         INTEGER(KIND=8), INTENT(IN) :: x
         TYPE(rpe_var), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x / y%val
     END FUNCTION div_long_rpe
 
@@ -304,7 +268,6 @@
         REAL(KIND=RPE_REAL_KIND), INTENT(IN) :: x
         TYPE(rpe_var), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x / y%val
     END FUNCTION div_real_rpe
 
@@ -312,7 +275,6 @@
         REAL(KIND=RPE_ALTERNATE_KIND), INTENT(IN) :: x
         TYPE(rpe_var), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x / y%val
     END FUNCTION div_realalt_rpe
 
@@ -726,7 +688,6 @@
         TYPE(rpe_var), INTENT(IN) :: x
         TYPE(rpe_var), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x%val ** y%val
     END FUNCTION pow_rpe_rpe
 
@@ -734,7 +695,6 @@
         TYPE(rpe_var), INTENT(IN) :: x
         INTEGER, INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x%val ** y
     END FUNCTION pow_rpe_integer
 
@@ -742,7 +702,6 @@
         TYPE(rpe_var), INTENT(IN) :: x
         INTEGER(KIND=8), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x%val ** y
     END FUNCTION pow_rpe_long
 
@@ -750,7 +709,6 @@
         TYPE(rpe_var), INTENT(IN) :: x
         REAL(KIND=RPE_REAL_KIND), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x%val ** y
     END FUNCTION pow_rpe_real
 
@@ -758,7 +716,6 @@
         TYPE(rpe_var), INTENT(IN) :: x
         REAL(KIND=RPE_ALTERNATE_KIND), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x%val ** y
     END FUNCTION pow_rpe_realalt
 
@@ -766,7 +723,6 @@
         INTEGER, INTENT(IN) :: x
         TYPE(rpe_var), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x ** y%val
     END FUNCTION pow_integer_rpe
 
@@ -774,7 +730,6 @@
         INTEGER(KIND=8), INTENT(IN) :: x
         TYPE(rpe_var), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x ** y%val
     END FUNCTION pow_long_rpe
 
@@ -782,7 +737,6 @@
         REAL(KIND=RPE_REAL_KIND), INTENT(IN) :: x
         TYPE(rpe_var), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x ** y%val
     END FUNCTION pow_real_rpe
 
@@ -790,6 +744,5 @@
         REAL(KIND=RPE_ALTERNATE_KIND), INTENT(IN) :: x
         TYPE(rpe_var), INTENT(IN) :: y
         TYPE(rpe_var) :: z
-        z%sbits = MAX(significand_bits(x), significand_bits(y))
         z = x ** y%val
     END FUNCTION pow_realalt_rpe
