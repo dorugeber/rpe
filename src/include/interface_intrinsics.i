@@ -1,8 +1,3 @@
-    PUBLIC :: epsilon
-    INTERFACE epsilon
-        MODULE PROCEDURE epsilon_rpe
-    END INTERFACE epsilon
-
     PUBLIC :: tiny
     INTERFACE tiny
         MODULE PROCEDURE tiny_rpe
@@ -109,13 +104,6 @@
         MODULE PROCEDURE atan2_rpe_real
         MODULE PROCEDURE atan2_real_rpe
     END INTERFACE atan2
-
-    PUBLIC :: dim
-    INTERFACE dim
-        MODULE PROCEDURE dim_rpe_rpe
-        MODULE PROCEDURE dim_rpe_real
-        MODULE PROCEDURE dim_real_rpe
-    END INTERFACE dim
 
     PUBLIC :: mod
     INTERFACE mod
